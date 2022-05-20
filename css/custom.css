@@ -2,7 +2,7 @@ body {
     background: #43cea2;
     background: -webkit-linear-gradient(to right, #185a9d, #43cea2);
     background: linear-gradient(to right, #185a9d, #43cea2); 
-    padding: 40px 150px;
+    padding: 40px 130px;
 }
 #contenido {
     background-color: white;
