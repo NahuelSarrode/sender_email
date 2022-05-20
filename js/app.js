@@ -14,6 +14,9 @@ function eventListeners() {
 	email.addEventListener('blur', formValidations);
 	asunto.addEventListener('blur', formValidations);
 	mensaje.addEventListener('blur', formValidations);
+
+  // form submit
+  form.addEventListener('submit', sendEmail);
 }
 
 function startApp() {
@@ -22,9 +25,9 @@ function startApp() {
 }
 
 function formValidations(e) {
+  const errors = document.querySelector('p.error');
 	if (e.target.value.length > 0) {
-		const errors = document.querySelector('p.error');
-		errors.remove();
+		if (errors) errors.remove();
 
 		e.target.classList.remove('border', 'border-red-500');
 		e.target.classList.add('border', 'border-green-500');
@@ -37,8 +40,7 @@ function formValidations(e) {
 
 	if (e.target.type === 'email') {
 		if (emailRegex.test(e.target.value)) {
-			const errors = document.querySelector('p.error');
-			errors.remove();
+      if (errors) errors.remove();
 
 			e.target.classList.remove('border', 'border-red-500');
 			e.target.classList.add('border', 'border-green-500');
@@ -47,6 +49,15 @@ function formValidations(e) {
 			e.target.classList.add('border', 'border-red-500');
 			showErrorAlert('Por favor ingrese un mail valido');
 		}
+	}
+
+	if (
+		emailRegex.test(email.value) &&
+		asunto.value != '' &&
+		mensaje.value != ''
+	) {
+		btnSend.disabled = false;
+		btnSend.classList.remove('cursor-not-allowed', 'opacity-50');
 	}
 }
 
@@ -66,4 +77,13 @@ function showErrorAlert(message) {
 
 	const errors = document.querySelectorAll('.error');
 	if (errors.length <= 0) form.appendChild(errorMessage);
+}
+
+function sendEmail(e) {
+  e.preventDefault();
+
+  const spinner = document.querySelector('#spinner');
+  spinner.style.display = 'flex';
+
+  setTimeout(() => { spinner.style.display = 'none' }, 3000)
 }
