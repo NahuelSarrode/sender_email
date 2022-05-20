@@ -5,4 +5,4 @@ This is a simple but powerfull email simulator that implements different javascr
 
 This project hasn't backend at this moment and it's not posible to send real emails but this funcionality will be addeed on the future. 
 
-To test the email sender plase visit: 
+To test the email sender plase visit: https://harmonious-klepon-36d967.netlify.app/
