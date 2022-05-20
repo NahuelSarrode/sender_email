@@ -1,4 +1,5 @@
 const btnSend = document.querySelector('#enviar');
+const btnReset = document.querySelector('#resetBtn');
 const email = document.querySelector('#email');
 const asunto = document.querySelector('#asunto');
 const mensaje = document.querySelector('#mensaje');
@@ -9,14 +10,19 @@ const emailRegex =
 eventListeners();
 
 function eventListeners() {
+	// wait until DOM is completly loaded
 	document.addEventListener('DOMContentLoaded', startApp);
 
+	// inputs eventListeners
 	email.addEventListener('blur', formValidations);
 	asunto.addEventListener('blur', formValidations);
 	mensaje.addEventListener('blur', formValidations);
 
-  // form submit
-  form.addEventListener('submit', sendEmail);
+	// reset the form
+	btnReset.addEventListener('click', resetForm);
+
+	// form submit
+	form.addEventListener('submit', sendEmail);
 }
 
 function startApp() {
@@ -25,28 +31,24 @@ function startApp() {
 }
 
 function formValidations(e) {
-  const errors = document.querySelector('p.error');
+	const errors = document.querySelector('p.error');
+
 	if (e.target.value.length > 0) {
 		if (errors) errors.remove();
 
-		e.target.classList.remove('border', 'border-red-500');
-		e.target.classList.add('border', 'border-green-500');
+		inputPassValidations(e.target);
 	} else {
-		e.target.classList.remove('border', 'border-green-500');
-		e.target.classList.add('border', 'border-red-500');
-
+    inputFailValidation(e.target);
 		showErrorAlert('Por favor complete todos los campos');
 	}
 
 	if (e.target.type === 'email') {
 		if (emailRegex.test(e.target.value)) {
-      if (errors) errors.remove();
+			if (errors) errors.remove();
 
-			e.target.classList.remove('border', 'border-red-500');
-			e.target.classList.add('border', 'border-green-500');
+			inputPassValidations(e.target);
 		} else {
-			e.target.classList.remove('border', 'border-green-500');
-			e.target.classList.add('border', 'border-red-500');
+			inputFailValidation(e.target);
 			showErrorAlert('Por favor ingrese un mail valido');
 		}
 	}
@@ -61,6 +63,19 @@ function formValidations(e) {
 	}
 }
 
+// paint input border on red
+function inputFailValidation(target) {
+  target.classList.remove('border', 'border-green-500');
+	target.classList.add('border', 'border-red-500');
+}
+
+// paint input border on green
+function inputPassValidations(target) {
+  target.classList.remove('border', 'border-red-500');
+	target.classList.add('border', 'border-green-500');
+}
+
+// show an error message
 function showErrorAlert(message) {
 	const errorMessage = document.createElement('p');
 	errorMessage.textContent = message;
@@ -79,11 +94,41 @@ function showErrorAlert(message) {
 	if (errors.length <= 0) form.appendChild(errorMessage);
 }
 
+// Simulate sending an error.
 function sendEmail(e) {
-  e.preventDefault();
+	e.preventDefault();
 
-  const spinner = document.querySelector('#spinner');
-  spinner.style.display = 'flex';
+	const spinner = document.querySelector('#spinner');
+	spinner.style.display = 'flex';
 
-  setTimeout(() => { spinner.style.display = 'none' }, 3000)
+	setTimeout(() => {
+		spinner.style.display = 'none';
+
+		// Create a new message
+		const p = document.createElement('p');
+		p.textContent = 'Email enviado correctamente';
+		p.classList.add(
+			'text-center',
+			'my-10',
+			'p-2',
+			'bg-green-500',
+			'text-white',
+			'font-bold',
+			'uppercase'
+		);
+
+		// Insert message into form body
+		form.insertBefore(p, spinner);
+
+		// Delete message after 5 seconds
+		setTimeout(() => {
+			p.remove();
+			resetForm();
+		}, 5000);
+	}, 3000);
+}
+
+function resetForm() {
+	form.reset();
+	startApp();
 }
