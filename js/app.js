@@ -75,6 +75,15 @@ function inputPassValidations(target) {
 	target.classList.add('border', 'border-green-500');
 }
 
+function removeInputColors() {
+	email.classList.remove('border', 'border-green-500');
+	email.classList.remove('border', 'border-red-500');
+	asunto.classList.remove('border', 'border-green-500');
+	asunto.classList.remove('border', 'border-red-500');
+	mensaje.classList.remove('border', 'border-green-500');
+	mensaje.classList.remove('border', 'border-red-500');
+}
+
 // show an error message
 function showErrorAlert(message) {
 	const errorMessage = document.createElement('p');
@@ -130,5 +139,6 @@ function sendEmail(e) {
 
 function resetForm() {
 	form.reset();
+	removeInputColors();
 	startApp();
 }
